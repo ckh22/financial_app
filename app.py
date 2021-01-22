@@ -18,8 +18,7 @@ username = 'azureuser'
 password = 'Azure1234567!' 
 
 # Robinhood auth credentials
-your_username = 'clifford.kei.hartley@gmail.com'
-your_password = 'wwaaxxdd55297'
+
 auth_data = rs.login(username=your_username,
          password=your_password,
          expiresIn=86400,
