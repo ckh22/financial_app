@@ -1,5 +1,6 @@
 # Library for Azure Connection
 import pyodbc
+import bcrypt
 
 # Update (1.22.21): Need to add safeguard methods to prevent errors in any of the query methods
 
@@ -23,9 +24,19 @@ class Azure():
         rows = self.cursor.fetchall()
         return rows
         
+    def login(self, email, password):
+        query = "SELECT * FROM [dbo].[Auth] WHERE email = '{email}' AND password = '{password}'".format(email=email, password='$2b$12$eYnPtklxZL55ZVOvgL5wp.pVNBqb2aqbVU.4SZTEt72jJpTpf/A9C')
+        self.cursor.execute(query)
+        rows = self.cursor.fetchall()[0]
+        secret = bytes(rows[2], 'utf-8')
+        if bcrypt.checkpw(password, secret):
+            print("IT MATCHES!")
+        else:
+            print("Something isn't right")
+        return rows
     # Create table
     # Parameters: list, name
-    def createInitialTable(self, list, name):
+    def createInitialTables(self, list, name):
         createQuery = "CREATE TABLE {name} (\n".format(name=name)
         switch = True
         headerList = {}
