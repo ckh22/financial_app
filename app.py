@@ -1,8 +1,15 @@
+# GUI Interface library
 import tkinter as tk
+
+# Robinhood API Library
 import robin_stocks as rs
-from auth import Auth
+
+# Auth creds
+from Auth import Auth
+# Stock Position
 from Position import Position
-from azure import Azure
+# Azure Database
+from Azure import Azure
 
 # SQL Azure Server credentials
 server = 'mysqlserver-962705397.database.windows.net' 
@@ -13,26 +20,32 @@ password = 'Azure1234567!'
 # Robinhood auth credentials
 your_username = 'clifford.kei.hartley@gmail.com'
 your_password = 'wwaaxxdd55297'
-
 auth_data = rs.login(username=your_username,
          password=your_password,
          expiresIn=86400,
          by_sms=True)
-
-db = Azure(server, database, username, password)
-
 user_credentials = Auth(auth_data)
+
+# Retrieving robinhood user account holdings
+# Will need to implement a checking component here
 holdings = rs.account.build_holdings()
 positionList = []
 for key, value in holdings.items():
     position = Position(key, value)
     positionList.append(position)
-    print(position)
-
-db.createTable(positionList, 'Positions')
 
 
+# Creating an Azure class instance
+db = Azure(server, database, username, password)
 
+# Creating & Deleting the initial positions table
+# Need to create an update component
+# db.deleteTable('Positions')
+# db.createInitialTable(positionList, 'Positions')
+rows = db.getTable("Positions")
+print(rows)
+
+# Creating an software gui through tk
 class Application(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
