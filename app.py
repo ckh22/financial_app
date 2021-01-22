@@ -12,13 +12,9 @@ from Position import Position
 from Azure import Azure
 
 # SQL Azure Server credentials
-server = 'mysqlserver-962705397.database.windows.net' 
-database = 'mySampleDatabase' 
-username = 'azureuser' 
-password = 'Azure1234567!' 
+
 
 # Robinhood auth credentials
-
 auth_data = rs.login(username=your_username,
          password=your_password,
          expiresIn=86400,
