@@ -1,6 +1,8 @@
 # Library for Azure Connection
 import pyodbc
 import bcrypt
+import uuid
+import bcrypt
 
 # Update (1.22.21): Need to add safeguard methods to prevent errors in any of the query methods
 
@@ -40,6 +42,15 @@ class Azure():
             return rows
         except:
             return 'An error in login'
+
+    def register(self, email, password):
+        checkQuery = "SELECT UID FROM [dbo].[Auth] WHERE email='{email}'".format(email=email)
+        self.cursor.execute(checkQuery)
+        rows = self.cursor.fetchall()
+        secret = bcrypt.hashpw(bytes(password, 'utf-8'), bcrypt.gensalt())
+        insertquery = "INSERT INTO [dbo].[Auth] VALUES ('{uuid}', '{email}', '{password}')".format(uuid=uuid.uuid1(), email=email, password=secret.decode('utf-8'))
+        self.query(insertquery, 'register')
+        print('user registered')
     # Create table
     # Parameters: list, name
     def createInitialTables(self, list, name):
