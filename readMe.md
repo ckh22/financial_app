@@ -17,3 +17,14 @@ Technologies
 
     pyodbc: to interact with the Azure SQL
     database
+
+    bcrypt: encode password data to provide
+    a secure password system
+
+    uuid: creating user id for each 
+    registered user
+    
+    os: used to navigate and create file deps
+
+    matplotlib: to create charts and graphs
+    for the GUI
