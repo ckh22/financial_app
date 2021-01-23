@@ -20,20 +20,26 @@ class Azure():
     # Parameter: name
     def getTable(self, name):
         query = "SELECT * FROM {name}".format(name=name)
-        self.cursor.execute(query)
-        rows = self.cursor.fetchall()
-        return rows
+        try:
+            self.cursor.execute(query)
+            rows = self.cursor.fetchall()
+            return rows
+        except:
+            return "An error in get"
         
     def login(self, email, password):
         query = "SELECT * FROM [dbo].[Auth] WHERE email = '{email}' AND password = '{password}'".format(email=email, password='$2b$12$eYnPtklxZL55ZVOvgL5wp.pVNBqb2aqbVU.4SZTEt72jJpTpf/A9C')
-        self.cursor.execute(query)
-        rows = self.cursor.fetchall()[0]
-        secret = bytes(rows[2], 'utf-8')
-        if bcrypt.checkpw(password, secret):
-            print("IT MATCHES!")
-        else:
-            print("Something isn't right")
-        return rows
+        try:
+            self.cursor.execute(query)
+            rows = self.cursor.fetchall()[0]
+            secret = bytes(rows[2], 'utf-8')
+            if bcrypt.checkpw(password, secret):
+                print('success logging user in')
+            else:
+                return {'status': 'error', 'message': 'Incorrect Password'}
+            return rows
+        except:
+            return 'An error in login'
     # Create table
     # Parameters: list, name
     def createInitialTables(self, list, name):
